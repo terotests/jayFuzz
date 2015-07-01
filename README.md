@@ -1,6 +1,6 @@
 # jayFuzz - file system storage and emulator
 
-Why?
+Emulates the file system writes on `IndexedDB`, `memory` and performs real writes on `node.js` environment.
 
 The system servers for following purposes:
 
