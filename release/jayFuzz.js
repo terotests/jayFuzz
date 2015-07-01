@@ -733,8 +733,6 @@
       // trait comes here...
 
       (function (_myTrait_) {
-        var _eventOn;
-        var _commands;
 
         // Initialize static variables here...
 
@@ -1259,8 +1257,6 @@
       // trait comes here...
 
       (function (_myTrait_) {
-        var _eventOn;
-        var _commands;
 
         // Initialize static variables here...
 
@@ -1867,8 +1863,6 @@
       // trait comes here...
 
       (function (_myTrait_) {
-        var _eventOn;
-        var _commands;
 
         // Initialize static variables here...
 
@@ -3009,8 +3003,6 @@
       // trait comes here...
 
       (function (_myTrait_) {
-        var _eventOn;
-        var _commands;
 
         // Initialize static variables here...
 
