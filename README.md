@@ -193,7 +193,6 @@ MIT
 #### Class localFs
 
 
-- [open](README.md#localFs_open)
 
 
 
@@ -577,16 +576,6 @@ this._acl = aclFile.trim();
 
 ```
         
-### <a name="localFs_open"></a>localFs::open(path)
-`path` Path to the filesystem
- 
-
-
-```javascript
-// fs.open(path, flags[, mode], callback)
-
-```
-
 
 
    

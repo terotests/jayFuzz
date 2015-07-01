@@ -3209,11 +3209,6 @@
       _myTrait_.__traitInit.push(function (aclFile) {
         this._acl = aclFile.trim();
       });
-
-      /**
-       * @param String path  - Path to the filesystem
-       */
-      _myTrait_.open = function (path) {};
     })(this);
   };
 
@@ -3258,5 +3253,3 @@
 // console.log("Row ",i," written succesfully");
 
 // search the path...
-
-// fs.open(path, flags[, mode], callback)
