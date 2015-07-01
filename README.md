@@ -1,4 +1,4 @@
-# jayFuzz - File system emulator, wrapper and storage for memory, indexedDB and node.js
+# jayFuzz - JSON file system
 
 Why?
 
@@ -10,7 +10,18 @@ The system servers for following purposes:
 
 Since the filsesystem can be packaged (a bit like `tar` in linux, but in JSON) it is quick to set up a test environment.
 
-Since the FS export is into JSON, you can also manipulate the filesystem using common JavaScript operation on libraries like lodash.
+In the memory format, each object represents a folder and object property a file like this:
+
+```javascript
+ // The file system description
+ {
+    "README.TXT" : "contents of the file",
+    "subDir" : {
+        "foobar.cc" : "my code is written ehre", 
+    }
+ }
+```
+Binary file support is intented to be added using `base64` encoding but this interface is very low lever interface for simluation purposes and does not natively support that.
 
 The library includes implementations for most simple FS operations using promise -based interface.
 
@@ -58,6 +69,56 @@ folder.writeFile("README.TXT", "We are on!").then( function() {
 
 
 ```
+
+# The supported FS operations
+
+## appendFile
+```javascript
+folder.appendFile("README.TXT", "next line").then( function() {
+    // ... append is done
+});
+
+```
+## folder#createDir
+```javascript
+folder.createDir("newFolder").then( function() {
+    // ... append is done
+});
+
+```
+## folder#listFiles
+```javascript
+folder.listFiles().then( function(list) {
+    // list = array of files
+});
+
+```
+## folder#listFolders
+```javascript
+folder.listFolders().then( function(list) {
+    // list = array of folders
+});
+
+```
+## folder#readFile
+```javascript
+folder.readFile("README.TXT").then( function(data) {
+    // data = contents of file
+});
+
+```
+
+## folder#writeFile
+```javascript
+folder.writeFile("README.TXT", "newData").then( function(data) {
+    // data written to file
+});
+
+```
+
+
+
+
 
 # Unserializing
 
