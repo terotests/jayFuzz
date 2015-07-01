@@ -571,8 +571,6 @@ The class has following internal singleton variables:
 ### localFs::constructor( aclFile )
 
 ```javascript
-this._acl = aclFile.trim();
-
 
 ```
         
