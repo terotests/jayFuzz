@@ -224,14 +224,10 @@ MIT
 - [collect](README.md#_promise_collect)
 - [fail](README.md#_promise_fail)
 - [fulfill](README.md#_promise_fulfill)
-- [genPlugin](README.md#_promise_genPlugin)
 - [isFulfilled](README.md#_promise_isFulfilled)
 - [isPending](README.md#_promise_isPending)
 - [isRejected](README.md#_promise_isRejected)
-- [nodeStyle](README.md#_promise_nodeStyle)
 - [onStateChange](README.md#_promise_onStateChange)
-- [plugin](README.md#_promise_plugin)
-- [props](README.md#_promise_props)
 - [reject](README.md#_promise_reject)
 - [rejectReason](README.md#_promise_rejectReason)
 - [resolve](README.md#_promise_resolve)
@@ -782,30 +778,6 @@ this.triggerStateChange();
 
 ```
 
-### <a name="_promise_genPlugin"></a>_promise::genPlugin(fname, fn)
-
-
-```javascript
-var me = this;
-this.plugin(fname,
-    function() {
-        var args = Array.prototype.slice.call(arguments,0);
-        console.log("Plugin args", args);
-        var myPromise = _promise();
-        this.then(function(v) {
-            var args2 = Array.prototype.slice.call(arguments,0);
-            var z = args.concat(args2);
-            var res = fn.apply(this,z); 
-            myPromise.resolve(res);
-        }, function(r) {
-            myPromise.reject(r);
-        });
-        return myPromise;
-
-    }
-);
-```
-
 ### _promise::constructor( onFulfilled, onRejected )
 
 ```javascript
@@ -859,77 +831,6 @@ return this._state == 0;
 return this._state == 2;
 ```
 
-### <a name="_promise_nodeStyle"></a>_promise::nodeStyle(fname, fn)
-
-
-```javascript
-var me = this;
-this.plugin(fname,
-    function() {
-        var args = Array.prototype.slice.call(arguments,0);
-        var last, userCb, cbIndex=0;
-        if(args.length>=0) {
-            last = args[args.length-1];
-            if(Object.prototype.toString.call(last) == '[object Function]') {
-                userCb = last;
-                cbIndex = args.length-1;
-            }
-        }
-
-        var mainPromise = wishes().pending();
-        this.then(function() {
-            var nodePromise = wishes().pending();
-            var args2 = Array.prototype.slice.call(arguments,0);
-            console.log("Orig args", args);
-            console.log("Then args", args2);
-            var z;
-            if(args.length==0) 
-                z = args2;
-            if(args2.length==0)
-                z = args;
-            if(!z) z = args2.concat(args);
-            cbIndex = z.length; // 0,fn... 2
-            if(userCb) cbIndex--;
-            z[cbIndex] = function(err) {
-                if(err) {
-                    console.log("Got error ",err);
-                    nodePromise.reject(err);
-                    mainPromise.reject(err);
-                    return;
-                }
-                if(userCb) {
-                    var args = Array.prototype.slice.call(arguments);
-                    var res = userCb.apply(this, args);
-                    mainPromise.resolve(res);
-                } else {
-                    var args = Array.prototype.slice.call(arguments,1);
-                    mainPromise.resolve.apply(mainPromise,args);
-                }
-            }
-            nodePromise.then( function(v) {
-                mainPromise.resolve(v);
-            });
-            
-            console.log("nodeStyle after concat", z);
-            var res = fn.apply(this,z); 
-            // myPromise.resolve(res);
-            // return nodePromise;
-            return nodePromise;
-        }, function(v) {
-            mainPromise.reject(v);
-        });
-        return mainPromise;
-        /*
-           log("..... now waiting "+ms);
-           var p = waitFor(ms);
-           p.then( function(v) {
-               myPromise.resolve(v);
-           });
-       */
-    }
-);
-```
-
 ### <a name="_promise_onStateChange"></a>_promise::onStateChange(fn)
 
 
@@ -939,70 +840,6 @@ if(!this._listeners)
     this._listeners = [];
 
 this._listeners.push(fn);
-```
-
-### <a name="_promise_plugin"></a>_promise::plugin(n, fn)
-
-
-```javascript
-
-_myTrait_[n] = fn;
-
-return this;
-```
-
-### <a name="_promise_props"></a>_promise::props(obj)
-
-
-```javascript
-var args = [];
-
-for(var n in obj) {
-    if(obj.hasOwnProperty(n)) {
-        args.push({
-           name : n,
-           promise : obj[n]
-        });
-    }
-}
-
-
-// console.log(args);
-var targetLen = args.length,
-    rCnt = 0,
-    myPromises = [],
-    myResults = {};
-    
-return this.then(
-    function() {
- 
-        var allPromise = wishes().pending();
-        args.forEach( function(def) {
-            var b = def.promise,
-                name = def.name;
-            if(b.then) {
-                // console.log("All, looking for ", b, " state = ", b._state);
-                myPromises.push(b);
-                
-                b.then(function(v) {
-                    myResults[name] = v;
-                    rCnt++;
-                    if(rCnt==targetLen) {
-                        allPromise.resolve(myResults);
-                    }
-                }, function(v) {
-                    allPromise.reject(v);
-                });
-                
-            } else {
-                allPromise.reject("Not list of promises");
-            }
-        })
-        
-        return allPromise;
-        
-    });
-
 ```
 
 ### <a name="_promise_reject"></a>_promise::reject(withReason)
