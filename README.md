@@ -1811,12 +1811,6 @@ return t === Object(t);
 
 The class has following internal singleton variables:
         
-* fs
-        
-* myDir
-        
-* path
-        
         
 ### <a name="memoryFsFolder__isFile"></a>memoryFsFolder::_isFile(fileName)
 
@@ -2353,12 +2347,6 @@ this._fsData = createFrom;
 
 
 The class has following internal singleton variables:
-        
-* fs
-        
-* myDir
-        
-* path
         
         
 ### <a name="nodeFsFolder__mkDir"></a>nodeFsFolder::_mkDir(dirName)

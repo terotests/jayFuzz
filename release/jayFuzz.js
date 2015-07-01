@@ -1291,9 +1291,6 @@
       })(this);
 
       (function (_myTrait_) {
-        var fs;
-        var myDir;
-        var path;
 
         // Initialize static variables here...
 
@@ -1895,9 +1892,6 @@
       })(this);
 
       (function (_myTrait_) {
-        var fs;
-        var myDir;
-        var path;
 
         // Initialize static variables here...
 
