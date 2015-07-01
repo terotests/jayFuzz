@@ -75,7 +75,7 @@ folder.writeFile("README.TXT", "We are on!").then( function() {
 
 # The supported FS operations
 
-## appendFile
+## folder#appendFile
 ```javascript
 folder.appendFile("README.TXT", "next line").then( function() {
     // ... append is done
