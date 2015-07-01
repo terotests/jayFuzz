@@ -1420,11 +1420,9 @@
          * @param float t
          */
         _myTrait_.getTree = function (t) {
-
           var treePromise = this.toData({
             getData: false
           });
-
           return treePromise;
         };
 
@@ -2665,11 +2663,9 @@
          * @param float t
          */
         _myTrait_.getTree = function (t) {
-
           var treePromise = this.toData({
             getData: false
           });
-
           return treePromise;
         };
 
