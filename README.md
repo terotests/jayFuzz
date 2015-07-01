@@ -1,4 +1,4 @@
-# jayFuzz - JSON file system
+# jayFuzz - file system storage and emulator
 
 Why?
 
