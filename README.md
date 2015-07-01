@@ -135,6 +135,8 @@ folder.fromData(data);
 
 # Serializing
 
+Filters can be used to filter out files or folders, especially if running in real filesystem, quite often not all files are required in the package.
+
 ```javascript
 var options = {
     fileFilter : function(fileName) {
