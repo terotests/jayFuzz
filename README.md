@@ -30,6 +30,8 @@ The library includes implementations for most simple FS operations using promise
 
 # Initialize with IndexedDB
 
+the database is named "vserver://"+serverName
+
 ```javascript
 
 var filesystem = fsServerIndexedDB("TheServerName");
@@ -1935,9 +1937,7 @@ if(this.isObject( this._pathObj[dirName] ) ) {
 
 
 ```javascript
-
 var treePromise =  this.toData({ getData : false});
-
 return treePromise;
 ```
 
@@ -3085,9 +3085,7 @@ return indexedDBFsFolder( this._server, subPath );
 
 
 ```javascript
-
 var treePromise =  this.toData({ getData : false});
-
 return treePromise;
 ```
 
@@ -3473,7 +3471,7 @@ return indexedDBFsFolder(this, "/");
 ```
 
 ### fsServerIndexedDB::constructor( serverName, createFrom )
-the database i&quot;vserver://&quot;+serverName
+the database is named &quot;vserver://&quot;+serverName
 ```javascript
 
 var me = this;
