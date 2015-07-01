@@ -2,11 +2,14 @@
 
 Emulates the file system writes on `IndexedDB`, `memory` and performs real writes on `node.js` environment.
 
-The system servers for following purposes:
+The goals are:
 
-1. To simulate filesystem read / write operations and persistence in client and server side using memory, node.js or IndexedDB as storage
-2. To serialize small chunks of filesystem to JSON format
-3. To unserialize small chunks of JSON file into filesystem
+1. Quickly setup a FS emulation in memory
+2. Simulate filesystem operations as if they are in server
+3. The same code can work in both client and server
+4. Created filesystem part can be saved
+5. You can use JavaScript to manipulate filesystem contents
+6. Serve as simple "tar" for sending file system structures over network
 
 Since the filsesystem can be packaged (a bit like `tar` in linux, but in JSON) it is quick to set up a test environment.
 
