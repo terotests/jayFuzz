@@ -1427,10 +1427,6 @@ return dbTable(this._db, name);
 
 The class has following internal singleton variables:
         
-* _eventOn
-        
-* _commands
-        
         
 ### <a name="_dataTrait_guid"></a>_dataTrait::guid(t)
 
@@ -2138,10 +2134,6 @@ return _promise(
 
 The class has following internal singleton variables:
         
-* _eventOn
-        
-* _commands
-        
         
 ### <a name="_dataTrait_guid"></a>_dataTrait::guid(t)
 
@@ -2729,10 +2721,6 @@ return _promise(
 ## trait _dataTrait
 
 The class has following internal singleton variables:
-        
-* _eventOn
-        
-* _commands
         
         
 ### <a name="_dataTrait_guid"></a>_dataTrait::guid(t)
@@ -3537,10 +3525,6 @@ this._db.then( function() {
 ## trait _dataTrait
 
 The class has following internal singleton variables:
-        
-* _eventOn
-        
-* _commands
         
         
 ### <a name="_dataTrait_guid"></a>_dataTrait::guid(t)
