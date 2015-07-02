@@ -3098,6 +3098,14 @@
          * @param float t
          */
         _myTrait_.getRootFolder = function (t) {
+
+          // just a trivial security that the FS is not used for root folder
+          var root = this._fsRoot;
+          if (!root || root.length < 15 || root.indexOf('..') >= 0) {
+            throw 'Invalid root folder';
+            return false;
+          }
+
           var me = this;
           return nodeFsFolder(me, me._fsRoot);
         };
@@ -3106,6 +3114,12 @@
         if (!_myTrait_.__traitInit) _myTrait_.__traitInit = [];
         _myTrait_.__traitInit.push(function (fsRoot, createFrom) {
 
+          // trivial security check to prevent accidentally using system root or
+          // directories close to it
+          if (!fsRoot || fsRoot.length < 15 || fsRoot.indexOf('..') >= 0) {
+            throw 'Invalid root folder';
+            return false;
+          }
           this._fsRoot = fsRoot;
         });
       })(this);
