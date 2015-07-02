@@ -1713,6 +1713,8 @@
           this._serverName = serverName;
           this._initServers();
           this._fsData = createFrom;
+
+          this.resolve(true);
         });
       })(this);
     };
@@ -1741,7 +1743,9 @@
         }
       } else return new fsServerMemory(a, b, c, d, e, f, g, h);
     };
-    // inheritance is here
+    // inheritance is here _promise
+
+    fsServerMemory_prototype.prototype = _promise.prototype;
 
     fsServerMemory._classInfo = {
       name: 'fsServerMemory'
@@ -2648,9 +2652,9 @@
         };
 
         /**
-         * @param float t
+         * @param float fileName
          */
-        _myTrait_.isFolder = function (t) {
+        _myTrait_.isFolder = function (fileName) {
           var p,
               me = this;
           return _promise(function (result, fail) {
@@ -3204,6 +3208,8 @@
             return false;
           }
           this._fsRoot = fsRoot;
+
+          this.resolve(true);
         });
       })(this);
     };
@@ -3232,7 +3238,9 @@
         }
       } else return new fsServerNode(a, b, c, d, e, f, g, h);
     };
-    // inheritance is here
+    // inheritance is here _promise
+
+    fsServerNode_prototype.prototype = _promise.prototype;
 
     fsServerNode._classInfo = {
       name: 'fsServerNode'

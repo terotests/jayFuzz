@@ -2256,6 +2256,7 @@ this._serverName = serverName;
 this._initServers();
 this._fsData = createFrom;
 
+this.resolve(true);
 ```
         
 
@@ -3087,7 +3088,7 @@ return _promise(
     } );
 ```
 
-### <a name="indexedDBFsFolder_isFolder"></a>indexedDBFsFolder::isFolder(t)
+### <a name="indexedDBFsFolder_isFolder"></a>indexedDBFsFolder::isFolder(fileName)
 
 
 ```javascript
@@ -3604,6 +3605,8 @@ if(!fsRoot || fsRoot.length< 15 || (fsRoot.indexOf("..") >=0)) {
     return false;
 }
 this._fsRoot = fsRoot;
+
+this.resolve(true);
 ```
         
 
