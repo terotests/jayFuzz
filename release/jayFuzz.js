@@ -1932,16 +1932,19 @@
             throw ' The directory must be specified ';
             return;
           }
+          if (!(typeof dirName == 'string')) {
+            throw ' The directory must be string ';
+            return;
+          }
+          if (dirName.indexOf('..') >= 0 || dirName.indexOf('~') >= 0) {
+            throw 'The directory must not contain relative path parts';
+            return;
+          }
 
           if (!fs) {
             fs = require('fs');
             path = require('path');
           }
-
-          console.log('-----');
-          console.log(JSON.stringify(dirName));
-
-          throw dirName;
         });
 
         /**
