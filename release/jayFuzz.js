@@ -1937,6 +1937,8 @@
             fs = require('fs');
             path = require('path');
           }
+
+          throw dirName;
         });
 
         /**
