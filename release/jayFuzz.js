@@ -1793,6 +1793,13 @@
          * @param float dirName
          */
         _myTrait_._mkDir = function (dirName) {
+
+          if (typeof dirName != 'string') {
+            console.log(JSON.stringiry(dirName));
+            console.log('--- is not object');
+            throw 'WRROR';
+            return;
+          }
           if (!fs.existsSync(dirName)) {
             fs.mkdirSync(dirName, 502, function (err) {});
           }
