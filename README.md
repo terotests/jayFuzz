@@ -65,9 +65,11 @@ filesystem.then( function() {
 In node.js environment you have to give the absolute path of the file system to be used for the constructor.
 
 ```javascript
-var filesystem = require("./jayFuzz.js");
-var folder = filesystem.nodeFsFolder("/path/to/the/directory/");
+var jayFuzz = require("./jayFuzz.js");
 
+var filesystem = jayFuzz.fsServerNode("/path/to/the/directory/");
+
+var folder = filesystem.getRootFolder();
 folder.writeFile("README.TXT", "We are on!").then( function() {
     // ... write is done
 });
@@ -2250,11 +2252,22 @@ this._fsData = createFrom;
 
 The class has following internal singleton variables:
         
+* fs
+        
+* path
+        
         
 ### <a name="nodeFsFolder__mkDir"></a>nodeFsFolder::_mkDir(dirName)
 
 
 ```javascript
+
+if(typeof(dirName) != "string") {
+    console.log(JSON.stringiry(dirName));
+    console.log("--- is not object");
+    throw "WRROR";
+    return;
+}
 if(!fs.existsSync(dirName)) {
   fs.mkdirSync(dirName, 502, function(err){});   
 }    
@@ -2384,11 +2397,20 @@ if(!dirName) {
     throw " The directory must be specified ";
     return;
 }
+if(!(typeof(dirName) == "string")) {
+    throw " The directory must be string ";
+    return;
+}
+if(dirName.indexOf("..") >=0 || dirName.indexOf("~") >=0  ) {
+    throw "The directory must not contain relative path parts";
+    return;
+}
 
 if(!fs) {
     fs = require('fs');
     path = require('path');
 }
+
 
 ```
         
@@ -3493,7 +3515,7 @@ if(!root || root.length< 15 || (root.indexOf("..") >=0)) {
 }
 
 var me = this;
-return nodeFsFolder( me, me._fsRoot );
+return nodeFsFolder( me._fsRoot );
 
 ```
 
