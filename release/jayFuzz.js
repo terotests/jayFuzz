@@ -1712,7 +1712,7 @@
         _myTrait_.__traitInit.push(function (serverName, createFrom) {
           this._serverName = serverName;
           this._initServers();
-          this._fsData = createFrom;
+          this._fsData = createFrom || {};
 
           this.resolve(true);
         });

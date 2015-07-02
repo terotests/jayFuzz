@@ -2254,7 +2254,7 @@ return memoryFsFolder( me, me._fsData );
 ```javascript
 this._serverName = serverName;
 this._initServers();
-this._fsData = createFrom;
+this._fsData = createFrom || {};
 
 this.resolve(true);
 ```
