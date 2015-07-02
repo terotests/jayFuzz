@@ -1682,128 +1682,20 @@
         };
 
         /**
-         * @param float path
-         * @param float data
-         */
-        _myTrait_._objectAtPath = function (path, data) {
-
-          if (!path) return;
-
-          var arr = path.split('/');
-          if (!data) data = this._fsData;
-
-          if (path.charAt(0) == '/') arr.unshift();
-
-          var lastObj = data,
-              lastName = path;
-
-          // The result has the object, name, type...
-          var res = {
-            obj: null,
-            name: '',
-            type: ''
-          };
-
-          while (arr.length > 0) {
-
-            var pathName = arr.shift();
-            if (pathName.length == 0) break;
-
-            if (data.data) {
-
-              // Then we go to the parent model...
-              if (pathName == '..') {
-                var pObj = this._find(data.__p);
-                if (pObj) {
-                  data = pObj;
-                  lastObj = data;
-                  continue;
-                } else {
-                  res.obj == null;
-                  return res;
-                }
-              }
-
-              var sub = data.data[pathName];
-              if (typeof sub == 'undefined') {
-                res.obj == null;
-                return res;
-              } else {
-                if (this.isObject(sub)) {
-                  res.obj = sub;
-                  res.type = 'obj';
-                  res.name = null;
-                  data = sub;
-                  if (this.isArray) res.type = 'array';
-                } else {
-                  res.obj = data;
-                  res.name = pathName;
-                }
-              }
-            }
-          }
-          return res;
-        };
-
-        /**
-         * @param float obj
-         */
-        _myTrait_.createFrom = function (obj) {};
-
-        /**
          * @param float t
          */
         _myTrait_.getRootFolder = function (t) {
           var me = this;
-          return _promise(function (result) {
-            result(memoryFsFolder(me, me._fsData));
-          });
+          return memoryFsFolder(me, me._fsData);
         };
 
         if (_myTrait_.__traitInit && !_myTrait_.hasOwnProperty('__traitInit')) _myTrait_.__traitInit = _myTrait_.__traitInit.slice();
         if (!_myTrait_.__traitInit) _myTrait_.__traitInit = [];
         _myTrait_.__traitInit.push(function (serverName, createFrom) {
-          // The format of the filesystem description
-          /*
-          // The directory informatin, the data can be object or it can be string
-          // Type : 1 = file
-          // Type : 2 = directory
-          // Example of a directory entry
-          {
-          data : {
-          file1 : {
-            data : "The file data",
-            _type : 1,
-            _acl : ""
-          }
-          },
-          _type : 2,
-          _acl : "string of the ACL data"
-          }
-          // Example of a file entry
-          {
-          data : "String contents of the file",
-          _type : 1,
-          _birthtime: 1435487618,
-          _atime : 1435487618,
-          _mtime : 1435487618,
-          _ctime : 1435487618,
-          _owner : "userid",
-          _group : "groupid",
-          _size : 232,
-          _acl : "string of the ACL data"
-          }
-          */
           this._serverName = serverName;
           this._initServers();
-
           this._fsData = createFrom;
         });
-
-        /**
-         * @param float pathString
-         */
-        _myTrait_.openDir = function (pathString) {};
       })(this);
     };
 
@@ -3182,6 +3074,85 @@
       }
     }).call(new Function('return this')());
 
+    // the subclass definition comes around here then
+
+    // The class definition is here...
+    var fsServerNode_prototype = function fsServerNode_prototype() {
+      // Then create the traits and subclasses for this class here...
+
+      (function (_myTrait_) {
+        var _servers;
+
+        // Initialize static variables here...
+
+        /**
+         * @param float t
+         */
+        _myTrait_._initServers = function (t) {
+          if (!_servers) {
+            _servers = {};
+          }
+        };
+
+        /**
+         * @param float t
+         */
+        _myTrait_.getRootFolder = function (t) {
+          var me = this;
+          return nodeFsFolder(me, me._fsRoot);
+        };
+
+        if (_myTrait_.__traitInit && !_myTrait_.hasOwnProperty('__traitInit')) _myTrait_.__traitInit = _myTrait_.__traitInit.slice();
+        if (!_myTrait_.__traitInit) _myTrait_.__traitInit = [];
+        _myTrait_.__traitInit.push(function (fsRoot, createFrom) {
+
+          this._fsRoot = fsRoot;
+        });
+      })(this);
+    };
+
+    var fsServerNode = function fsServerNode(a, b, c, d, e, f, g, h) {
+      var m = this,
+          res;
+      if (m instanceof fsServerNode) {
+        var args = [a, b, c, d, e, f, g, h];
+        if (m.__factoryClass) {
+          m.__factoryClass.forEach(function (initF) {
+            res = initF.apply(m, args);
+          });
+          if (typeof res == 'function') {
+            if (res._classInfo.name != fsServerNode._classInfo.name) return new res(a, b, c, d, e, f, g, h);
+          } else {
+            if (res) return res;
+          }
+        }
+        if (m.__traitInit) {
+          m.__traitInit.forEach(function (initF) {
+            initF.apply(m, args);
+          });
+        } else {
+          if (typeof m.init == 'function') m.init.apply(m, args);
+        }
+      } else return new fsServerNode(a, b, c, d, e, f, g, h);
+    };
+    // inheritance is here
+
+    fsServerNode._classInfo = {
+      name: 'fsServerNode'
+    };
+    fsServerNode.prototype = new fsServerNode_prototype();
+
+    (function () {
+      if (typeof define !== 'undefined' && define !== null && define.amd != null) {
+        __amdDefs__['fsServerNode'] = fsServerNode;
+        this.fsServerNode = fsServerNode;
+      } else if (typeof module !== 'undefined' && module !== null && module.exports != null) {
+        module.exports['fsServerNode'] = fsServerNode;
+      } else {
+        this.fsServerNode = fsServerNode;
+      }
+    }).call(new Function('return this')());
+
     (function (_myTrait_) {
 
       // Initialize static variables here...
@@ -3231,5 +3202,3 @@
 // --- let's not ---
 
 // console.log("Row ",i," written succesfully");
-
-// search the path...
