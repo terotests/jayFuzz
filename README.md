@@ -215,6 +215,8 @@ MIT
     
     
     
+    
+    
 
 
    
@@ -415,10 +417,7 @@ MIT
 
 
 - [_initServers](README.md#fsServerMemory__initServers)
-- [_objectAtPath](README.md#fsServerMemory__objectAtPath)
-- [createFrom](README.md#fsServerMemory_createFrom)
 - [getRootFolder](README.md#fsServerMemory_getRootFolder)
-- [openDir](README.md#fsServerMemory_openDir)
 
 
 
@@ -560,6 +559,25 @@ MIT
 
       
     
+      
+            
+#### Class fsServerNode
+
+
+- [_initServers](README.md#fsServerNode__initServers)
+- [getRootFolder](README.md#fsServerNode_getRootFolder)
+
+
+
+   
+
+
+   
+
+
+
+      
+    
 
 
 
@@ -581,6 +599,8 @@ The class has following internal singleton variables:
 
 
    
+    
+    
     
     
     
@@ -2194,142 +2214,24 @@ if(!_servers) {
 }
 ```
 
-### <a name="fsServerMemory__objectAtPath"></a>fsServerMemory::_objectAtPath(path, data)
-
-
-```javascript
-
-if(!path) return;
-
-var arr = path.split("/");
-if(!data) data = this._fsData;
-
-if(path.charAt(0)=="/") arr.unshift();
-
-var lastObj = data, lastName = path;
-
-// The result has the object, name, type...
-var res = {
-    obj :  null,
-    name : "",
-    type : ""
-};
-
-while(arr.length>0) {
-    
-    var pathName = arr.shift();
-    if(pathName.length==0) break;
-    
-    if(data.data) {
-        
-        // Then we go to the parent model...
-        if(pathName=="..") {
-            var pObj = this._find(data.__p);
-            if(pObj) {
-                data = pObj;
-                lastObj = data;
-                continue;
-            } else {
-                res.obj == null;
-                return res;
-            }
-        }
-        
-        var sub = data.data[pathName];
-        if(typeof(sub)=="undefined") {
-            res.obj == null;
-            return res;            
-        } else {
-            if(this.isObject(sub)) {
-                res.obj = sub;
-                res.type = "obj";
-                res.name = null;
-                data = sub;
-                if(this.isArray) res.type = "array";
-            } else {
-                res.obj  = data;
-                res.name = pathName;
-            }
-        }
-    }
-}
-return res;
-```
-
-### <a name="fsServerMemory_createFrom"></a>fsServerMemory::createFrom(obj)
-
-
-```javascript
-
-```
-
 ### <a name="fsServerMemory_getRootFolder"></a>fsServerMemory::getRootFolder(t)
 
 
 ```javascript
 var me = this;
-return _promise(
-    function(result) {
-        result( memoryFsFolder( me, me._fsData ) );
-    });
+return memoryFsFolder( me, me._fsData );
 
 ```
 
 ### fsServerMemory::constructor( serverName, createFrom )
 
 ```javascript
-// The format of the filesystem description
-/*
-
-// The directory informatin, the data can be object or it can be string
-// Type : 1 = file
-// Type : 2 = directory
-
-// Example of a directory entry
-{
-    
-    data : {
-        file1 : {
-            data : "The file data",
-            _type : 1,
-            _acl : ""
-        }
-    },
-    _type : 2,
-    _acl : "string of the ACL data"
-}
-
-// Example of a file entry
-{
-    data : "String contents of the file",
-    _type : 1,
-    _birthtime: 1435487618,
-    _atime : 1435487618,
-    _mtime : 1435487618,
-    _ctime : 1435487618,
-    _owner : "userid",
-    _group : "groupid",
-    _size : 232,
-    _acl : "string of the ACL data"
-}
-
-
-*/
 this._serverName = serverName;
 this._initServers();
-
 this._fsData = createFrom;
 
 ```
         
-### <a name="fsServerMemory_openDir"></a>fsServerMemory::openDir(pathString)
-
-
-```javascript
-
-// search the path...
-```
-
 
 
    
@@ -3554,6 +3456,66 @@ return t === Object(t);
    
       
     
+
+
+
+      
+    
+      
+            
+# Class fsServerNode
+
+
+The class has following internal singleton variables:
+        
+* _servers
+        
+        
+### <a name="fsServerNode__initServers"></a>fsServerNode::_initServers(t)
+
+
+```javascript
+if(!_servers) {
+    _servers = {};
+}
+```
+
+### <a name="fsServerNode_getRootFolder"></a>fsServerNode::getRootFolder(t)
+
+
+```javascript
+
+// just a trivial security that the FS is not used for root folder
+var root = this._fsRoot;
+if(!root || root.length< 15 || (root.indexOf("..") >=0)) {
+    throw "Invalid root folder";
+    return false;
+}
+
+var me = this;
+return nodeFsFolder( me, me._fsRoot );
+
+```
+
+### fsServerNode::constructor( fsRoot, createFrom )
+
+```javascript
+
+// trivial security check to prevent accidentally using system root or
+// directories close to it
+if(!fsRoot || fsRoot.length< 15 || (fsRoot.indexOf("..") >=0)) {
+    throw "Invalid root folder";
+    return false;
+}
+this._fsRoot = fsRoot;
+```
+        
+
+
+   
+
+
+   
 
 
 
