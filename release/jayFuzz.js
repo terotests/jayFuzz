@@ -3121,7 +3121,7 @@
           }
 
           var me = this;
-          return nodeFsFolder(me, me._fsRoot);
+          return nodeFsFolder(me._fsRoot);
         };
 
         if (_myTrait_.__traitInit && !_myTrait_.hasOwnProperty('__traitInit')) _myTrait_.__traitInit = _myTrait_.__traitInit.slice();
