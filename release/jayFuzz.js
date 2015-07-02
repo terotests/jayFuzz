@@ -1337,9 +1337,10 @@
                 result: true
               });
             } else {
+              fold[fileName] = data;
               result({
-                result: false,
-                text: 'File does not exist'
+                result: true,
+                text: 'Created the file'
               });
             }
           });

@@ -1877,7 +1877,8 @@ return _promise(
             fold[fileName] += data;
             result({result : true});
         } else {
-            result({result : false, text:"File does not exist"});
+            fold[fileName]  = data;
+            result({result : true, text:"Created the file"});
         }
         
     } );
