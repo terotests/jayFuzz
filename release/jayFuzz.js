@@ -1404,6 +1404,13 @@
         };
 
         /**
+         * @param string name
+         */
+        _myTrait_.getFolder = function (name) {
+          return this.getSubFolderObj(name);
+        };
+
+        /**
          * @param Object dirName
          */
         _myTrait_.getSubFolderObj = function (dirName) {
@@ -1439,6 +1446,17 @@
               me = this;
           return _promise(function (result, fail) {
             result(me._isFile(fileName));
+          });
+        };
+
+        /**
+         * @param float dirName
+         */
+        _myTrait_.isFolder = function (dirName) {
+          var p,
+              me = this;
+          return _promise(function (result, fail) {
+            result(me._isFolder(dirName));
           });
         };
 
@@ -1908,6 +1926,13 @@
         };
 
         /**
+         * @param string name
+         */
+        _myTrait_.getFolder = function (name) {
+          return this.getSubFolderObj(name);
+        };
+
+        /**
          * @param float dirName
          */
         _myTrait_.getSubFolderObj = function (dirName) {
@@ -1948,7 +1973,7 @@
         });
 
         /**
-         * @param float fileName
+         * @param string fileName
          */
         _myTrait_.isFile = function (fileName) {
 
@@ -1959,7 +1984,30 @@
             fileName = path.basename(fileName);
 
             fs.stat(_rootDir + '/' + fileName, function (err, stats) {
-              if (err || !stats.isFile()) result(false);
+              if (err || !stats.isFile()) {
+                result(false);
+                return;
+              }
+              result(true);
+            });
+          });
+        };
+
+        /**
+         * @param float fileName
+         */
+        _myTrait_.isFolder = function (fileName) {
+          var _rootDir = this._rootDir;
+          var me = this;
+
+          return _promise(function (result, fail) {
+            fileName = path.basename(fileName);
+
+            fs.stat(_rootDir + '/' + fileName, function (err, stats) {
+              if (err || !stats.isDirectory()) {
+                result(false);
+                return;
+              }
               result(true);
             });
           });
@@ -2554,6 +2602,13 @@
         };
 
         /**
+         * @param string name
+         */
+        _myTrait_.getFolder = function (name) {
+          return this.getSubFolderObj(name);
+        };
+
+        /**
          * @param Object dirName
          */
         _myTrait_.getSubFolderObj = function (dirName) {
@@ -2589,6 +2644,17 @@
               me = this;
           return _promise(function (result, fail) {
             result(me._isFile(fileName));
+          });
+        };
+
+        /**
+         * @param float t
+         */
+        _myTrait_.isFolder = function (t) {
+          var p,
+              me = this;
+          return _promise(function (result, fail) {
+            result(me._isFolder(fileName));
           });
         };
 

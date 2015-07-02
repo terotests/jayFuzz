@@ -379,9 +379,11 @@ MIT
 - [appendFile](README.md#memoryFsFolder_appendFile)
 - [createDir](README.md#memoryFsFolder_createDir)
 - [fromData](README.md#memoryFsFolder_fromData)
+- [getFolder](README.md#memoryFsFolder_getFolder)
 - [getSubFolderObj](README.md#memoryFsFolder_getSubFolderObj)
 - [getTree](README.md#memoryFsFolder_getTree)
 - [isFile](README.md#memoryFsFolder_isFile)
+- [isFolder](README.md#memoryFsFolder_isFolder)
 - [listFiles](README.md#memoryFsFolder_listFiles)
 - [listFolders](README.md#memoryFsFolder_listFolders)
 - [readFile](README.md#memoryFsFolder_readFile)
@@ -441,9 +443,11 @@ MIT
 - [appendFile](README.md#nodeFsFolder_appendFile)
 - [createDir](README.md#nodeFsFolder_createDir)
 - [fromData](README.md#nodeFsFolder_fromData)
+- [getFolder](README.md#nodeFsFolder_getFolder)
 - [getSubFolderObj](README.md#nodeFsFolder_getSubFolderObj)
 - [getTree](README.md#nodeFsFolder_getTree)
 - [isFile](README.md#nodeFsFolder_isFile)
+- [isFolder](README.md#nodeFsFolder_isFolder)
 - [listFiles](README.md#nodeFsFolder_listFiles)
 - [listFolders](README.md#nodeFsFolder_listFolders)
 - [readFile](README.md#nodeFsFolder_readFile)
@@ -492,9 +496,11 @@ MIT
 - [appendFile](README.md#indexedDBFsFolder_appendFile)
 - [createDir](README.md#indexedDBFsFolder_createDir)
 - [fromData](README.md#indexedDBFsFolder_fromData)
+- [getFolder](README.md#indexedDBFsFolder_getFolder)
 - [getSubFolderObj](README.md#indexedDBFsFolder_getSubFolderObj)
 - [getTree](README.md#indexedDBFsFolder_getTree)
 - [isFile](README.md#indexedDBFsFolder_isFile)
+- [isFolder](README.md#indexedDBFsFolder_isFolder)
 - [listFiles](README.md#indexedDBFsFolder_listFiles)
 - [listFolders](README.md#indexedDBFsFolder_listFolders)
 - [readFile](README.md#indexedDBFsFolder_readFile)
@@ -1939,6 +1945,13 @@ return _promise(
 
 ```
 
+### <a name="memoryFsFolder_getFolder"></a>memoryFsFolder::getFolder(name)
+
+
+```javascript
+return this.getSubFolderObj(name);
+```
+
 ### <a name="memoryFsFolder_getSubFolderObj"></a>memoryFsFolder::getSubFolderObj(dirName)
 
 
@@ -1974,6 +1987,17 @@ var p, me = this;
 return _promise(
     function(result, fail) {
         result(me._isFile(fileName));
+    } );
+```
+
+### <a name="memoryFsFolder_isFolder"></a>memoryFsFolder::isFolder(dirName)
+
+
+```javascript
+var p, me = this;
+return _promise(
+    function(result, fail) {
+        result(me._isFolder(dirName));
     } );
 ```
 
@@ -2374,6 +2398,13 @@ return _promise(
 
 ```
 
+### <a name="nodeFsFolder_getFolder"></a>nodeFsFolder::getFolder(name)
+
+
+```javascript
+return this.getSubFolderObj(name);
+```
+
 ### <a name="nodeFsFolder_getSubFolderObj"></a>nodeFsFolder::getSubFolderObj(dirName)
 
 
@@ -2427,7 +2458,32 @@ return _promise(
         fileName = path.basename(fileName);
 
        fs.stat(_rootDir+"/"+fileName, function(err,stats){
-         if(err || !stats.isFile()) result(false);
+         if(err || !stats.isFile()) {
+             result(false);
+             return;
+         }
+         result(true);
+       });        
+ 
+    });
+```
+
+### <a name="nodeFsFolder_isFolder"></a>nodeFsFolder::isFolder(fileName)
+
+
+```javascript
+var _rootDir = this._rootDir;
+var me = this;
+
+return _promise(
+    function(result, fail) {
+        fileName = path.basename(fileName);
+
+       fs.stat(_rootDir+"/"+fileName, function(err,stats){
+         if(err || !stats.isDirectory()) {
+             result(false);
+             return;
+         }
          result(true);
        });        
  
@@ -2983,6 +3039,13 @@ return _promise(
 
 ```
 
+### <a name="indexedDBFsFolder_getFolder"></a>indexedDBFsFolder::getFolder(name)
+
+
+```javascript
+return this.getSubFolderObj(name);
+```
+
 ### <a name="indexedDBFsFolder_getSubFolderObj"></a>indexedDBFsFolder::getSubFolderObj(dirName)
 
 
@@ -3021,6 +3084,17 @@ var p, me = this;
 return _promise(
     function(result, fail) {
         result(me._isFile(fileName));
+    } );
+```
+
+### <a name="indexedDBFsFolder_isFolder"></a>indexedDBFsFolder::isFolder(t)
+
+
+```javascript
+var p, me = this;
+return _promise(
+    function(result, fail) {
+        result(me._isFolder(fileName));
     } );
 ```
 
