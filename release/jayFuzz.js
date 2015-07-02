@@ -1938,6 +1938,9 @@
             path = require('path');
           }
 
+          console.log('-----');
+          console.log(JSON.stringify(dirName));
+
           throw dirName;
         });
 
