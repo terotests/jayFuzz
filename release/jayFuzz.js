@@ -1784,6 +1784,8 @@
       })(this);
 
       (function (_myTrait_) {
+        var fs;
+        var path;
 
         // Initialize static variables here...
 
