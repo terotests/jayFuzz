@@ -1467,6 +1467,7 @@
          * @param string str
          */
         _myTrait_.linesToJsonArray = function (str) {
+          if (!str || typeof str != 'string') return [];
           var a = str.split('\n');
           var res = [];
           a.forEach(function (line) {
@@ -2037,6 +2038,7 @@
          * @param string str
          */
         _myTrait_.linesToJsonArray = function (str) {
+          if (!str || typeof str != 'string') return [];
           var a = str.split('\n');
           var res = [];
           a.forEach(function (line) {
@@ -2695,6 +2697,7 @@
          * @param string str
          */
         _myTrait_.linesToJsonArray = function (str) {
+          if (!str || typeof str != 'string') return [];
           var a = str.split('\n');
           var res = [];
           a.forEach(function (line) {

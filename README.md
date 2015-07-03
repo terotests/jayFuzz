@@ -2013,6 +2013,7 @@ return _promise(
 
 
 ```javascript
+if(!str || typeof(str) != "string") return [];
 var a = str.split("\n");
 var res = [];
 a.forEach( function(line) {
@@ -2516,6 +2517,7 @@ return _promise(
 
 
 ```javascript
+if(!str || typeof(str) != "string") return [];
 var a = str.split("\n");
 var res = [];
 a.forEach( function(line) {
@@ -3137,6 +3139,7 @@ return _promise(
 
 
 ```javascript
+if(!str || typeof(str) != "string") return [];
 var a = str.split("\n");
 var res = [];
 a.forEach( function(line) {
