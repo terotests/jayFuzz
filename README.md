@@ -384,6 +384,7 @@ MIT
 - [getTree](README.md#memoryFsFolder_getTree)
 - [isFile](README.md#memoryFsFolder_isFile)
 - [isFolder](README.md#memoryFsFolder_isFolder)
+- [linesToJsonArray](README.md#memoryFsFolder_linesToJsonArray)
 - [listFiles](README.md#memoryFsFolder_listFiles)
 - [listFolders](README.md#memoryFsFolder_listFolders)
 - [readFile](README.md#memoryFsFolder_readFile)
@@ -448,6 +449,7 @@ MIT
 - [getTree](README.md#nodeFsFolder_getTree)
 - [isFile](README.md#nodeFsFolder_isFile)
 - [isFolder](README.md#nodeFsFolder_isFolder)
+- [linesToJsonArray](README.md#nodeFsFolder_linesToJsonArray)
 - [listFiles](README.md#nodeFsFolder_listFiles)
 - [listFolders](README.md#nodeFsFolder_listFolders)
 - [readFile](README.md#nodeFsFolder_readFile)
@@ -501,6 +503,7 @@ MIT
 - [getTree](README.md#indexedDBFsFolder_getTree)
 - [isFile](README.md#indexedDBFsFolder_isFile)
 - [isFolder](README.md#indexedDBFsFolder_isFolder)
+- [linesToJsonArray](README.md#indexedDBFsFolder_linesToJsonArray)
 - [listFiles](README.md#indexedDBFsFolder_listFiles)
 - [listFolders](README.md#indexedDBFsFolder_listFolders)
 - [readFile](README.md#indexedDBFsFolder_readFile)
@@ -1459,6 +1462,10 @@ return dbTable(this._db, name);
 
 The class has following internal singleton variables:
         
+* _eventOn
+        
+* _commands
+        
         
 ### <a name="_dataTrait_guid"></a>_dataTrait::guid(t)
 
@@ -2002,6 +2009,19 @@ return _promise(
     } );
 ```
 
+### <a name="memoryFsFolder_linesToJsonArray"></a>memoryFsFolder::linesToJsonArray(str)
+
+
+```javascript
+var a = str.split("\n");
+var res = [];
+a.forEach( function(line) {
+    if(line.trim().length==0) return;
+    res.push( JSON.parse(line) );
+})
+return res;
+```
+
 ### <a name="memoryFsFolder_listFiles"></a>memoryFsFolder::listFiles(filter)
 
 
@@ -2490,6 +2510,19 @@ return _promise(
        });        
  
     });
+```
+
+### <a name="nodeFsFolder_linesToJsonArray"></a>nodeFsFolder::linesToJsonArray(str)
+
+
+```javascript
+var a = str.split("\n");
+var res = [];
+a.forEach( function(line) {
+    if(line.trim().length==0) return;
+    res.push( JSON.parse(line) );
+})
+return res;
 ```
 
 ### <a name="nodeFsFolder_listFiles"></a>nodeFsFolder::listFiles(filter)
@@ -3098,6 +3131,19 @@ return _promise(
     function(result, fail) {
         result(me._isFolder(fileName));
     } );
+```
+
+### <a name="indexedDBFsFolder_linesToJsonArray"></a>indexedDBFsFolder::linesToJsonArray(str)
+
+
+```javascript
+var a = str.split("\n");
+var res = [];
+a.forEach( function(line) {
+    if(line.trim().length==0) return;
+    res.push( JSON.parse(line) );
+})
+return res;
 ```
 
 ### <a name="indexedDBFsFolder_listFiles"></a>indexedDBFsFolder::listFiles(filter)

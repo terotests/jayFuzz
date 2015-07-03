@@ -733,6 +733,8 @@
       // trait comes here...
 
       (function (_myTrait_) {
+        var _eventOn;
+        var _commands;
 
         // Initialize static variables here...
 
@@ -1462,6 +1464,19 @@
         };
 
         /**
+         * @param string str
+         */
+        _myTrait_.linesToJsonArray = function (str) {
+          var a = str.split('\n');
+          var res = [];
+          a.forEach(function (line) {
+            if (line.trim().length == 0) return;
+            res.push(JSON.parse(line));
+          });
+          return res;
+        };
+
+        /**
          * @param function filter
          */
         _myTrait_.listFiles = function (filter) {
@@ -2016,6 +2031,19 @@
               result(true);
             });
           });
+        };
+
+        /**
+         * @param string str
+         */
+        _myTrait_.linesToJsonArray = function (str) {
+          var a = str.split('\n');
+          var res = [];
+          a.forEach(function (line) {
+            if (line.trim().length == 0) return;
+            res.push(JSON.parse(line));
+          });
+          return res;
         };
 
         /**
@@ -2661,6 +2689,19 @@
           return _promise(function (result, fail) {
             result(me._isFolder(fileName));
           });
+        };
+
+        /**
+         * @param string str
+         */
+        _myTrait_.linesToJsonArray = function (str) {
+          var a = str.split('\n');
+          var res = [];
+          a.forEach(function (line) {
+            if (line.trim().length == 0) return;
+            res.push(JSON.parse(line));
+          });
+          return res;
         };
 
         /**
