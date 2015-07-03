@@ -493,6 +493,7 @@ MIT
 - [_loadFiles](README.md#indexedDBFsFolder__loadFiles)
 - [_loadFolders](README.md#indexedDBFsFolder__loadFolders)
 - [_normalize](README.md#indexedDBFsFolder__normalize)
+- [_onlyClearWrites](README.md#indexedDBFsFolder__onlyClearWrites)
 - [_removeFileFromCache](README.md#indexedDBFsFolder__removeFileFromCache)
 - [_removeFolderFromCache](README.md#indexedDBFsFolder__removeFolderFromCache)
 - [appendFile](README.md#indexedDBFsFolder_appendFile)
@@ -2920,6 +2921,39 @@ return _promise(
 ```javascript
 var str = pathName.replace("//", "/");
 return str;
+```
+
+### <a name="indexedDBFsFolder__onlyClearWrites"></a>indexedDBFsFolder::_onlyClearWrites(fileName)
+
+
+```javascript
+var p, me = this;
+var local = this._db,
+    server = this._server;
+
+return _promise(
+    function(result, fail) {
+
+        server.then( function() {
+            return me._isFile( fileName );
+        }).then( function(isFile) {
+            if(!isFile) {
+                return local.table("files").addRows([
+                    { name : fileName, folderName : me._path }
+                ]);
+            } else {
+                return "OK";
+            } 
+        }).then( function() {
+            // remove the old write from the file table
+            return local.table("fileWrites").remove({filePath : me._filePath(fileName) });
+        }).then( function() {
+            // all should be ready...
+            result({result : true, text : "writes cleared"});
+        }).fail(fail);
+
+    } );
+
 ```
 
 ### <a name="indexedDBFsFolder__removeFileFromCache"></a>indexedDBFsFolder::_removeFileFromCache(fileName)
