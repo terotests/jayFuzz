@@ -1904,10 +1904,7 @@ return _promise(
         var fold = me._pathObj;
         if(!me._isFile(dirName) && !me._isFolder(dirName)) {
             fold[dirName] = {};
-        } else {
-            fail({result : false, text : "Creating directory failed"});
-            return;
-        }
+        } 
         result({result : true});
     } );
 ```
