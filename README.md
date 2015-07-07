@@ -453,6 +453,7 @@ MIT
 - [listFiles](README.md#nodeFsFolder_listFiles)
 - [listFolders](README.md#nodeFsFolder_listFolders)
 - [readFile](README.md#nodeFsFolder_readFile)
+- [removeFile](README.md#nodeFsFolder_removeFile)
 - [toData](README.md#nodeFsFolder_toData)
 - [writeFile](README.md#nodeFsFolder_writeFile)
 
@@ -2089,7 +2090,7 @@ return _promise(
         if(me._isFile(fileName)) {
             delete fold[fileName];
         } 
-        result({result : true});
+        result({result : true, text : "file "+fileName+" removed"});
     } );
 
 ```
@@ -2617,6 +2618,26 @@ return _promise(
                return;
             }
             result( data );
+        });
+});
+```
+
+### <a name="nodeFsFolder_removeFile"></a>nodeFsFolder::removeFile(fileName)
+
+
+```javascript
+var _rootDir = this._rootDir;
+var me = this;
+
+return _promise(
+    function(result, fail) {
+        fileName = path.basename(fileName);
+        fs.unlink(_rootDir+"/"+fileName, function (err, data) {
+            if (err) {
+               fail( err );
+               return;
+            }
+            result({result : true, text : "file "+fileName+" removed"});
         });
 });
 ```
