@@ -68,12 +68,12 @@ In node.js environment you have to give the absolute path of the file system to 
 var jayFuzz = require("./jayFuzz.js");
 
 var filesystem = jayFuzz.fsServerNode("/path/to/the/directory/");
-
-var folder = filesystem.getRootFolder();
-folder.writeFile("README.TXT", "We are on!").then( function() {
-    // ... write is done
+filesystem.then( function() {
+    var folder = filesystem.getRootFolder();
+    folder.writeFile("README.TXT", "We are on!").then( function() {
+        // ... write is done
+    });
 });
-
 
 ```
 
