@@ -104,7 +104,7 @@ folder.listFiles().then( function(list) {
 ## folder#findPath
 ```javascript
 folder.findPath("my/sub/path").then( function(folderObj) {
-    // list = array of folders
+    // folderObj = false or the path object
 });
 
 ```
