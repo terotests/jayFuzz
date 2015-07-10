@@ -100,6 +100,15 @@ folder.listFiles().then( function(list) {
 });
 
 ```
+
+## folder#findPath
+```javascript
+folder.findPath("my/sub/path").then( function(folderObj) {
+    // list = array of folders
+});
+
+```
+
 ## folder#listFolders
 ```javascript
 folder.listFolders().then( function(list) {
@@ -444,6 +453,7 @@ MIT
 - [_mkDir](README.md#nodeFsFolder__mkDir)
 - [appendFile](README.md#nodeFsFolder_appendFile)
 - [createDir](README.md#nodeFsFolder_createDir)
+- [findPath](README.md#nodeFsFolder_findPath)
 - [fromData](README.md#nodeFsFolder_fromData)
 - [getFolder](README.md#nodeFsFolder_getFolder)
 - [getSubFolderObj](README.md#nodeFsFolder_getSubFolderObj)
@@ -500,6 +510,7 @@ MIT
 - [_removeFolderFromCache](README.md#indexedDBFsFolder__removeFolderFromCache)
 - [appendFile](README.md#indexedDBFsFolder_appendFile)
 - [createDir](README.md#indexedDBFsFolder_createDir)
+- [findPath](README.md#indexedDBFsFolder_findPath)
 - [fromData](README.md#indexedDBFsFolder_fromData)
 - [getFolder](README.md#indexedDBFsFolder_getFolder)
 - [getSubFolderObj](README.md#indexedDBFsFolder_getSubFolderObj)
@@ -1927,31 +1938,34 @@ return _promise( function(response) {
    }
    
    var sub, rootProm, currFolder;
-   while(sub = parts.shift()) {
-       
-       if(!fold) {
-           response(false);
-           return;
-       }
-       if(!rootProm) {
-           currFolder = fold;
-           rootProm = fold.isFolder(sub); 
-       } else {
-           rootProm = rootProm.then( function(f) {
-               currFolder = f;
-               if(f) return f.isFolder(sub);
-               return false;
-           })
-       }
-       
-       rootProm = rootProm.then( function(is_fold) {
-                  if(is_fold) {
-                      return currFolder.getFolder(sub);
-                  } 
-                  return false;
-              });
-       
-   }
+   parts.forEach(
+       function(sub) {
+           
+           if(!sub || sub.trim().length==0) return;
+           
+           if(!fold) {
+               response(false);
+               return;
+           }
+           if(!rootProm) {
+               currFolder = fold;
+               rootProm = fold.isFolder(sub); 
+           } else {
+               rootProm = rootProm.then( function(f) {
+                   currFolder = f;
+                   if(f) return f.isFolder(sub);
+                   return false;
+               })
+           }
+           
+           rootProm = rootProm.then( function(is_fold) {
+                      if(is_fold) {
+                          return currFolder.getFolder(sub);
+                      } 
+                      return false;
+                  });
+       });
+
    rootProm.then(response);
     
 });
@@ -2425,6 +2439,57 @@ return _promise(
         me._mkDir(_rootDir + "/" +dirN); 
         result({result:true, text:"Directory created"});
     });
+
+```
+
+### <a name="nodeFsFolder_findPath"></a>nodeFsFolder::findPath(name)
+
+
+```javascript
+
+if(name.charAt(0)=="/") name = name.substring(0);
+var parts = name.trim().split("/");
+var fold = this;
+
+return _promise( function(response) {
+   
+   if(!parts[0]) {
+       response(fold);
+       return;
+   }
+   
+   var sub, rootProm, currFolder;
+   parts.forEach(
+       function(sub) {
+           
+           if(!sub || sub.trim().length==0) return;
+           
+           if(!fold) {
+               response(false);
+               return;
+           }
+           if(!rootProm) {
+               currFolder = fold;
+               rootProm = fold.isFolder(sub); 
+           } else {
+               rootProm = rootProm.then( function(f) {
+                   currFolder = f;
+                   if(f) return f.isFolder(sub);
+                   return false;
+               })
+           }
+           
+           rootProm = rootProm.then( function(is_fold) {
+                      if(is_fold) {
+                          return currFolder.getFolder(sub);
+                      } 
+                      return false;
+                  });
+       });
+
+   rootProm.then(response);
+    
+});
 
 ```
 
@@ -3129,6 +3194,57 @@ return _promise(
         }).fail(fail);
 
     } );
+```
+
+### <a name="indexedDBFsFolder_findPath"></a>indexedDBFsFolder::findPath(name)
+
+
+```javascript
+
+if(name.charAt(0)=="/") name = name.substring(0);
+var parts = name.trim().split("/");
+var fold = this;
+
+return _promise( function(response) {
+   
+   if(!parts[0]) {
+       response(fold);
+       return;
+   }
+   
+   var sub, rootProm, currFolder;
+   parts.forEach(
+       function(sub) {
+           
+           if(!sub || sub.trim().length==0) return;
+           
+           if(!fold) {
+               response(false);
+               return;
+           }
+           if(!rootProm) {
+               currFolder = fold;
+               rootProm = fold.isFolder(sub); 
+           } else {
+               rootProm = rootProm.then( function(f) {
+                   currFolder = f;
+                   if(f) return f.isFolder(sub);
+                   return false;
+               })
+           }
+           
+           rootProm = rootProm.then( function(is_fold) {
+                      if(is_fold) {
+                          return currFolder.getFolder(sub);
+                      } 
+                      return false;
+                  });
+       });
+
+   rootProm.then(response);
+    
+});
+
 ```
 
 ### <a name="indexedDBFsFolder_fromData"></a>indexedDBFsFolder::fromData(obj)
