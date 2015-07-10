@@ -378,6 +378,7 @@ MIT
 - [_isFolder](README.md#memoryFsFolder__isFolder)
 - [appendFile](README.md#memoryFsFolder_appendFile)
 - [createDir](README.md#memoryFsFolder_createDir)
+- [findPath](README.md#memoryFsFolder_findPath)
 - [fromData](README.md#memoryFsFolder_fromData)
 - [getFolder](README.md#memoryFsFolder_getFolder)
 - [getSubFolderObj](README.md#memoryFsFolder_getSubFolderObj)
@@ -1907,6 +1908,67 @@ return _promise(
         } 
         result({result : true});
     } );
+```
+
+### <a name="memoryFsFolder_findPath"></a>memoryFsFolder::findPath(name)
+
+
+```javascript
+
+if(name.charAt(0)=="/") name = name.substring(0);
+var parts = name.trim().split("/");
+var fold = this;
+
+return _promise( function(response) {
+   
+   if(!parts[0]) {
+       response(fold);
+       return;
+   }
+   
+   var sub, rootProm, currFolder;
+   while(sub = parts.shift()) {
+       
+       if(!fold) {
+           response(false);
+           return;
+       }
+       if(!rootProm) {
+           currFolder = fold;
+           rootProm = fold.isFolder(sub); 
+       } else {
+           rootProm = rootProm.then( function(f) {
+               currFolder = f;
+               if(f) return f.isFolder(sub);
+               return false;
+           })
+       }
+       
+       rootProm = rootProm.then( function(is_fold) {
+                  if(is_fold) {
+                      return currFolder.getFolder(sub);
+                  } 
+                  return false;
+              });
+       
+   }
+   rootProm.then(response);
+    
+});
+
+
+
+
+/*
+            .then( function(r) {
+                results.push( { result : r.channelId == "f1",  text : "request for channel f1 was successfull" } );
+                return fsRoot.getFolder("my") || false;
+            })
+            .then( function(f)  {
+                if(f) return f.getFolder("channel") || false;
+            })
+*/
+
 ```
 
 ### <a name="memoryFsFolder_fromData"></a>memoryFsFolder::fromData(obj)
