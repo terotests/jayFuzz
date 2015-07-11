@@ -501,6 +501,8 @@ MIT
 
 - [_classFactory](README.md#indexedDBFsFolder__classFactory)
 - [_filePath](README.md#indexedDBFsFolder__filePath)
+- [_initCreateDir](README.md#indexedDBFsFolder__initCreateDir)
+- [_initFromData](README.md#indexedDBFsFolder__initFromData)
 - [_isFile](README.md#indexedDBFsFolder__isFile)
 - [_isFolder](README.md#indexedDBFsFolder__isFolder)
 - [_lastPath](README.md#indexedDBFsFolder__lastPath)
@@ -510,6 +512,7 @@ MIT
 - [_onlyClearWrites](README.md#indexedDBFsFolder__onlyClearWrites)
 - [_removeFileFromCache](README.md#indexedDBFsFolder__removeFileFromCache)
 - [_removeFolderFromCache](README.md#indexedDBFsFolder__removeFolderFromCache)
+- [_writeFile](README.md#indexedDBFsFolder__writeFile)
 - [appendFile](README.md#indexedDBFsFolder_appendFile)
 - [createDir](README.md#indexedDBFsFolder_createDir)
 - [findPath](README.md#indexedDBFsFolder_findPath)
@@ -2977,6 +2980,94 @@ str = str.replace("//", "/");
 return str;
 ```
 
+### <a name="indexedDBFsFolder__initCreateDir"></a>indexedDBFsFolder::_initCreateDir(dirName)
+
+
+```javascript
+var p, me = this;
+var local = this._db,
+    server = this._server;
+
+return _promise(
+    function(result, fail) {
+
+        me._isFolder( dirName )
+        .then( function(isFolder) {
+            if(!isFolder) {
+                var row = { name : me._normalize( me._path+dirName+"/" ), parentFolder : me._path };
+                return local.table("folders").addRows([row]);
+            } else {
+                return "OK";
+            } 
+        }).then( function() {
+            
+            result({result : true, text : "folder "+dirName+" created"});
+        }).fail(fail);
+
+    } );
+```
+
+### <a name="indexedDBFsFolder__initFromData"></a>indexedDBFsFolder::_initFromData(obj)
+
+
+```javascript
+
+// Create new directories...
+var me = this;
+var local = this._db,
+    server = this._server;
+
+return _promise(
+    function(result, fail) {
+        var all = [];
+        var myProm = _promise();
+        console.log("__initFromData");
+        console.log(obj);
+        
+        for(var n in obj ) {
+            
+            if(n.indexOf("..") >=0) {
+                fail(".. symbol is not allowed in the file or path names");
+                result(false);
+                return;
+            }
+            
+            var name = n;
+            console.log(name);
+            if(me.isObject(obj[name])) {
+                ( function() { 
+                    var dirDone = _promise();
+                    all.push(dirDone);
+                    me._initCreateDir(name)
+                        .then( function() {
+                            var newF = me.getSubFolderObj(name);
+                            return newF._initFromData( obj[name] );
+                        })
+                        .then( function() {
+                            dirDone.resolve();
+                        })
+                        .fail( function() {
+                            dirDone.resolve();
+                        });
+                }());
+            } else {
+                if(typeof(obj[name]) == "string") {      
+                    console.log("should write "+obj[name]);
+                    all.push( me._writeFile( name, obj[name] ));
+                }
+            }
+        }        
+        myProm.all( all ).then( function() {
+            result(true);
+        }).fail( fail );
+        myProm.resolve(true);                
+
+    });
+
+
+
+```
+
 ### <a name="indexedDBFsFolder__isFile"></a>indexedDBFsFolder::_isFile(fileName)
 
 
@@ -3041,18 +3132,10 @@ var local = this._db,
     
 return _promise(
     function(result) {
-        
-        /*
-        if(me._fileCache) {
+        local.table("files").getAll({folderName:me._path}).then( function(res) {
+            me._fileCache = res;
             result(me._fileCache);
-        }*/
-        
-        me._server.then( function() {
-            local.table("files").getAll({folderName:me._path}).then( function(res) {
-                me._fileCache = res;
-                result(me._fileCache);
-            });    
-        });
+        });    
     });
 ```
 
@@ -3065,17 +3148,10 @@ var local = this._db,
     
 return _promise(
     function(result) {
-        /*
-        if(me._folderCache) {
+        local.table("folders").getAll({parentFolder:me._path}).then( function(res) {
+            me._folderCache = res;
             result(me._folderCache);
-        }*/
-
-        me._server.then( function() {
-            local.table("folders").getAll({parentFolder:me._path}).then( function(res) {
-                me._folderCache = res;
-                result(me._folderCache);
-            });    
-        });
+        });    
     });
 ```
 
@@ -3146,6 +3222,48 @@ if(this._folderCache) {
         }
     }
 }
+```
+
+### <a name="indexedDBFsFolder__writeFile"></a>indexedDBFsFolder::_writeFile(fileName, fileData)
+
+
+```javascript
+var p, me = this;
+var local = this._db,
+    server = this._server;
+
+console.log("writeFile ",fileName,fileData);
+
+
+return _promise(
+    function(result, fail) {
+        
+        if(typeof(fileData) != "string") {
+            // can not write anything else than strings
+            fail({result : false, text : "Only string writes are accepted"});
+            return;
+        }
+
+        me._isFile( fileName ).then( function(isFile) {
+            if(!isFile) {
+                return local.table("files").addRows([
+                    { name : fileName, folderName : me._path }
+                ]);
+            } else {
+                return "OK";
+            } 
+        }).then( function() {
+            // remove the old write from the file table
+            return local.table("fileWrites").remove({filePath : me._filePath(fileName) });
+        }).then( function() {
+            return local.table("fileWrites").addRows([{filePath : me._filePath(fileName), data : fileData }]);
+        }).then( function() {
+            // all should be ready...
+            result({result : true, text : "file "+fileName+" written"});
+        }).fail(fail);
+
+    } );
+
 ```
 
 ### <a name="indexedDBFsFolder_appendFile"></a>indexedDBFsFolder::appendFile(fileName, data)
@@ -3280,7 +3398,6 @@ return _promise(
     function(result, fail) {
         var all = [];
         var myProm = _promise();
-        
         server.then(
             function() {
                 for(var n in obj ) {
@@ -3290,7 +3407,7 @@ return _promise(
                         return;
                     }
                     
-                    var name = a;
+                    var name = n;
                     if(me.isObject(obj[name])) {
                         ( function() { 
                             var dirDone = _promise();
@@ -3798,13 +3915,30 @@ this._db = _localDB(this._dbName,
 // make sure that there is at least the root folder ...
 this._db.then( function() {
     me._db.table("folders").count().then( function(cnt) {
+
         if(cnt >= 1) {
             
-            me.resolve(true);
+            if(createFrom) {
+
+                me.getRootFolder()._initFromData( createFrom ).then(
+                    function() {
+                        me.resolve(true); 
+                    });
+            } else {
+                me.resolve(true);
+            }
         } else {
             
             me._db.table("folders").addRows([{name:"/"}]).then( function() {
-                 me.resolve(true); // the root has been inserted
+                if(createFrom) {
+
+                    me.getRootFolder()._initFromData( createFrom ).then(
+                        function() {
+                            me.resolve(true); 
+                        });
+                } else {
+                    me.resolve(true);
+                }
             });
         }
     });
@@ -3913,7 +4047,11 @@ if(!fsRoot || fsRoot.length< 15 || (fsRoot.indexOf("..") >=0)) {
 }
 this._fsRoot = fsRoot;
 
-this.resolve(true);
+if(createFrom) {
+    
+} else {
+    this.resolve(true);
+}
 ```
         
 
