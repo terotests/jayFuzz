@@ -2530,7 +2530,7 @@ return _promise(
             
             var name = path.basename(n);
             if(me.isObject(obj[name])) {
-                ( function() { 
+                ( function(obj,name) { 
                     var dirDone = _promise();
                     all.push(dirDone);
                     me.createDir(name)
@@ -2544,7 +2544,7 @@ return _promise(
                         .fail( function() {
                             dirDone.resolve();
                         });
-                }());
+                }(obj,name));
             } else {
                 if(typeof(obj[name]) == "string") {                
                     all.push( me.writeFile( name, obj[name] ));
@@ -4043,9 +4043,12 @@ if(!fsRoot || fsRoot.length< 15 || (fsRoot.indexOf("..") >=0)) {
     return false;
 }
 this._fsRoot = fsRoot;
+var me = this;
 
 if(createFrom) {
-    
+    this.getRootFolder().fromData(createFrom).then( function() {
+        me.resolve(true);
+    });
 } else {
     this.resolve(true);
 }
