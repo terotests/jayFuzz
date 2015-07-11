@@ -3021,9 +3021,7 @@ return _promise(
     function(result, fail) {
         var all = [];
         var myProm = _promise();
-        console.log("__initFromData");
-        console.log(obj);
-        
+
         for(var n in obj ) {
             
             if(n.indexOf("..") >=0) {
@@ -3033,9 +3031,9 @@ return _promise(
             }
             
             var name = n;
-            console.log(name);
             if(me.isObject(obj[name])) {
-                ( function() { 
+
+                ( function(obj, name) { 
                     var dirDone = _promise();
                     all.push(dirDone);
                     me._initCreateDir(name)
@@ -3049,10 +3047,9 @@ return _promise(
                         .fail( function() {
                             dirDone.resolve();
                         });
-                }());
+                }(obj, name));
             } else {
                 if(typeof(obj[name]) == "string") {      
-                    console.log("should write "+obj[name]);
                     all.push( me._writeFile( name, obj[name] ));
                 }
             }
