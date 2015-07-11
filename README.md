@@ -392,6 +392,7 @@ MIT
 - [getFolder](README.md#memoryFsFolder_getFolder)
 - [getSubFolderObj](README.md#memoryFsFolder_getSubFolderObj)
 - [getTree](README.md#memoryFsFolder_getTree)
+- [id](README.md#memoryFsFolder_id)
 - [isFile](README.md#memoryFsFolder_isFile)
 - [isFolder](README.md#memoryFsFolder_isFolder)
 - [linesToJsonArray](README.md#memoryFsFolder_linesToJsonArray)
@@ -458,6 +459,7 @@ MIT
 - [getFolder](README.md#nodeFsFolder_getFolder)
 - [getSubFolderObj](README.md#nodeFsFolder_getSubFolderObj)
 - [getTree](README.md#nodeFsFolder_getTree)
+- [id](README.md#nodeFsFolder_id)
 - [isFile](README.md#nodeFsFolder_isFile)
 - [isFolder](README.md#nodeFsFolder_isFolder)
 - [linesToJsonArray](README.md#nodeFsFolder_linesToJsonArray)
@@ -515,6 +517,7 @@ MIT
 - [getFolder](README.md#indexedDBFsFolder_getFolder)
 - [getSubFolderObj](README.md#indexedDBFsFolder_getSubFolderObj)
 - [getTree](README.md#indexedDBFsFolder_getTree)
+- [id](README.md#indexedDBFsFolder_id)
 - [isFile](README.md#indexedDBFsFolder_isFile)
 - [isFolder](README.md#indexedDBFsFolder_isFolder)
 - [linesToJsonArray](README.md#indexedDBFsFolder_linesToJsonArray)
@@ -2053,12 +2056,20 @@ var treePromise =  this.toData({ getData : false});
 return treePromise;
 ```
 
+### <a name="memoryFsFolder_id"></a>memoryFsFolder::id(t)
+
+
+```javascript
+return this._id;
+```
+
 ### memoryFsFolder::constructor( server, pathObj )
 
 ```javascript
 
 this._server = server;
 this._pathObj = pathObj;
+this._id = this.guid();
 
 ```
         
@@ -2568,10 +2579,18 @@ return nodeFsFolder(this._rootDir+"/"+dirName);
 return this.toData({ getData : false});
 ```
 
+### <a name="nodeFsFolder_id"></a>nodeFsFolder::id(t)
+
+
+```javascript
+return this._id;
+```
+
 ### nodeFsFolder::constructor( dirName )
 
 ```javascript
 this._rootDir = dirName;
+this._id = this.guid();
 
 if(!dirName) {
     throw " The directory must be specified ";
@@ -3331,6 +3350,13 @@ var treePromise =  this.toData({ getData : false});
 return treePromise;
 ```
 
+### <a name="indexedDBFsFolder_id"></a>indexedDBFsFolder::id(t)
+
+
+```javascript
+return this._id;
+```
+
 ### indexedDBFsFolder::constructor( server, pathString )
 
 ```javascript
@@ -3338,6 +3364,7 @@ return treePromise;
 
 this._server  = server;
 this._path = pathString;
+this._id = this.guid();
 this._db = server.getDb();
 
 
